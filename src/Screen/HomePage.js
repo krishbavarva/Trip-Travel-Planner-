@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import axios from "axios";
 
 const travelCarouselImages = [
   "/images/wp6987774.jpg",
@@ -31,8 +32,85 @@ const travelDestinations = [
   }
 ];
 
+
 const TravelPlannerHome = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [accommodations, setAccommodations] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+   // Change this to the desired location
+   const location = "New Delhi"; // Example location
+   const checkInDate = "2025-02-01"; // Example check-in date
+   const checkOutDate = "2025-02-05"; // Example check-out date
+   const guests = 2; // Number of guests
+ 
+   useEffect(() => {
+     const fetchAccommodations = async () => {
+       setLoading(true);
+ 
+       try {
+         const response = await axios.get(
+           "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination?query=man",
+           {
+            //  params: {
+            //    city: location,
+            //    checkin_date: checkInDate,
+            //    checkout_date: checkOutDate,
+            //    guests_number: guests,
+            //    page: 0, // Starting page for pagination
+            //    filter_by_currency: "INR", // Currency set to Indian Rupees
+            //  },
+             headers: {
+               "X-RapidAPI-Key": "b85f3f9f6bmsh628c0cb5c3646e5p14bee7jsned38c83e277", // Replace with your API key
+               "X-RapidAPI-Host": "booking-com15.p.rapidapi.com",
+             },
+           }
+         );
+ 
+         // Limiting the results to 5
+         setAccommodations(response.data.result.slice(0, 5));
+       } catch (err) {
+         console.error("Error fetching accommodations:", err);
+       } finally {
+         setLoading(false);
+       }
+     };
+ 
+     fetchAccommodations();
+   }, []);
+  useEffect(() => {
+    const fetchCities = async () => {
+      setLoading(true);
+
+      try {
+        const response = await axios.get(
+          "https://wft-geo-db.p.rapidapi.com/v1/geo/cities",
+          {
+            params: {
+              limit: 10, // Number of cities to fetch
+              countryIds: "IN", // Optional: Specify country (e.g., "IN" for India)
+              namePrefix: "A", // Optional: Filter cities starting with 'A'
+            },
+            headers: {
+              "X-RapidAPI-Key": "b85f3f9f6bmsh628c0cb5c3646e5p14bee7jsned38c83e2777",
+              "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+            },
+          }
+        );
+        console.log(response , "response")
+        if(response?.status === 200){
+          setCities(response?.data?.data)
+          setLoading(false)
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchCities();
+  }, []);
+  console.log(cities , "city")
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
@@ -165,7 +243,53 @@ const TravelPlannerHome = () => {
           ))}
         </div>
       </section>
-
+      {/*city */}
+      <div className="p-6 ">
+      <h1 className="text-2xl font-bold mb-4 text-center">
+        GeoDB Cities Finder
+      </h1>
+      {loading ? (
+        <p className="text-center text-teal-500">Loading cities...</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cities &&  cities?.map((c) => (
+            <div
+              key={c.id}
+              className=" p-4 rounded shadow hover:scale-105 transition-transform"
+            >
+              <h2 className="text-lg font-bold text-teal-700">
+                {c.name}, {c.country}
+              </h2>
+              <p className="text-gray-600">Region: {c.region}</p>
+              {/* <p className="text-gray-600">Population: {c.population}</p> */}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+      {/* Booking */}
+      <div className="p-6 ">
+      <h1 className="text-2xl font-bold mb-4 text-center">Accommodation Finder</h1>
+      {loading ? (
+        <p className="text-center text-teal-500">Loading accommodations...</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {accommodations.map((accommodation) => (
+            <div
+              key={accommodation.id}
+              className=" p-4 rounded shadow hover:scale-105 transition-transform"
+            >
+              <h2 className="text-lg font-bold text-teal-700">
+                {accommodation.name}
+              </h2>
+              <p className="text-gray-600">Location: {accommodation.address}</p>
+              <p className="text-gray-600">Price: {accommodation.price}</p>
+              <p className="text-gray-600">Rating: {accommodation.rating}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
       {/* Footer */}
       <footer className="w-full bg-gradient-to-r from-teal-500 to-rose-500 text-white py-8">
         <div className="w-[90%] mx-auto text-center">
