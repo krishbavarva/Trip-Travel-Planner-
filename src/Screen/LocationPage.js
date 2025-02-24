@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Hotels from "./HotelPage";
+import FindTransportation from "./Transpotation";
 
 const LocationPage = () => {
   const [location, setLocation] = useState("");
@@ -13,7 +14,8 @@ const LocationPage = () => {
   return (
     <>
       {hotelPage ? (
-        <Hotels location={location} />
+        <FindTransportation location={location}/>
+        // <Hotels location={location} />
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
           <h1 className="text-2xl font-bold mb-4">Enter Your Location</h1>

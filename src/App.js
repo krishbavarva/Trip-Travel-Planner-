@@ -9,11 +9,11 @@ import WeatherDetails from './Screen/WeatherDetail';
 function App() {
   return (
   <>
-    {/* <TravelPlannerHome/> */}
+    <TravelPlannerHome/>
     {/* <AboutPage/> */}
     {/* <HotelPage/> */}
     {/* <WeatherDetails/> */}
-    <FindTransportation/>
+    {/* <FindTransportation/> */}
 
   </>
   );
