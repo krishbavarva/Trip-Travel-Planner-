@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import Hotels from "./HotelPage";
 import FindTransportation from "./Transpotation";
 
-const LocationPage = () => {
+const LocationPage = ({ setCreateTrip }) => {
   const [location, setLocation] = useState("");
   const [hotelPage, setHotelPage] = useState(false);
 
@@ -11,11 +10,14 @@ const LocationPage = () => {
     // Add your search functionality here
   };
 
+  const goBack = () => {
+    setCreateTrip(false);
+  };
+
   return (
     <>
       {hotelPage ? (
-        <FindTransportation location={location}/>
-        // <Hotels location={location} />
+        <FindTransportation location={location} setHotelPage={setHotelPage} />
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
           <h1 className="text-2xl font-bold mb-4">Enter Your Location</h1>
@@ -31,6 +33,12 @@ const LocationPage = () => {
             className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md shadow-lg hover:bg-blue-600 transition"
           >
             Search
+          </button>
+          <button
+            onClick={goBack}
+            className="mt-4 px-6 py-2 bg-gray-500 text-white rounded-md shadow-lg hover:bg-gray-600 transition"
+          >
+            Go Back
           </button>
         </div>
       )}

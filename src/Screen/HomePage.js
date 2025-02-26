@@ -128,7 +128,7 @@ const TravelPlannerHome = () => {
   return (
     <div className="w-full bg-gradient-to-br from-teal-50 via-rose-100 to-amber-50">
       {createTrip ? (
-        <LocationPage />
+        <LocationPage setCreateTrip={setCreateTrip}/>
       ) : (
         <>
           {/* Image Carousel Section */}

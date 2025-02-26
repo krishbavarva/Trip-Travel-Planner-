@@ -1,11 +1,13 @@
 import { useState } from "react";
+import Hotels from "./HotelPage";
 
-const FindTransportation = ({location}) => {
+const FindTransportation = ({ location, setHotelPage }) => {
   const [transportType, setTransportType] = useState("flight");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
   const [results, setResults] = useState([]);
+  const [findHotel, setFindHotel] = useState(false);
 
   const fetchTransportData = async () => {
     let apiUrl = "";
@@ -40,71 +42,97 @@ const FindTransportation = ({location}) => {
     }
   };
 
+  const goToFindHotel = () => {
+    setFindHotel(true);
+  };
+
+  const goBack = () => {
+    setHotelPage(false);
+  };
+
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Find Transportation</h2>
+    <>
+      {findHotel ? (
+        <Hotels location={location} setFindHotel={setFindHotel} />
+      ) : (
+        <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
+          <h2 className="text-xl font-bold mb-4">Find Transportation</h2>
 
-      <select
-        value={transportType}
-        onChange={(e) => setTransportType(e.target.value)}
-        className="w-full p-2 border rounded mb-4"
-      >
-        <option value="flight">Flight</option>
-        <option value="bus">Bus</option>
-        <option value="train">Train</option>
-      </select>
+          <select
+            value={transportType}
+            onChange={(e) => setTransportType(e.target.value)}
+            className="w-full p-2 border rounded mb-4"
+          >
+            <option value="flight">Flight</option>
+            <option value="bus">Bus</option>
+            <option value="train">Train</option>
+          </select>
 
-      <input
-        type="text"
-        placeholder="From (IATA Code)"
-        value={from}
-        onChange={(e) => setFrom(e.target.value)}
-        className="w-full p-2 border rounded mb-4"
-      />
+          <input
+            type="text"
+            placeholder="From (IATA Code)"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+            className="w-full p-2 border rounded mb-4"
+          />
 
-      <input
-        type="text"
-        placeholder="To (IATA Code)"
-        value={to}
-        onChange={(e) => setTo(e.target.value)}
-        className="w-full p-2 border rounded mb-4"
-      />
+          <input
+            type="text"
+            placeholder="To (IATA Code)"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+            className="w-full p-2 border rounded mb-4"
+          />
 
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        className="w-full p-2 border rounded mb-4"
-      />
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full p-2 border rounded mb-4"
+          />
 
-      <button
-        onClick={fetchTransportData}
-        className="w-full bg-blue-500 text-white p-2 rounded"
-      >
-        Search
-      </button>
+          <button
+            onClick={fetchTransportData}
+            className="w-full bg-blue-500 text-white p-2 rounded mb-2"
+          >
+            Search Flights
+          </button>
+          <button
+            onClick={goToFindHotel}
+            className="w-full bg-blue-500 text-white p-2 rounded mb-2"
+          >
+            Find Hotels
+          </button>
+          <button
+            onClick={goBack}
+            className="w-full bg-gray-500 text-white p-2 rounded"
+          >
+            Go Back
+          </button>
 
-      {results && (
-        <div className="mt-6">
-          <h3 className="font-bold mb-2">Flight Results:</h3>
-          <ul className="list-disc pl-5">
-            {results && results?.data?.map((flight, index) => (
-              <li key={index} className="mb-4 border-b pb-2">
-                <strong>Flight:</strong> {flight.carrier.iata} {flight.flightNumber} <br />
-                <strong>Airline:</strong> {flight.marketingFlights?.[0]?.code || "Unknown"}<br />
-                <strong>Departure:</strong> {flight.departure.airport.iata} ({flight.departure.airport.icao}) at {flight.departure.time.local} <br />
-                <strong>Arrival:</strong> {flight.arrival.airport.iata} ({flight.arrival.airport.icao}) at {flight.arrival.time.local} <br />
-                <strong>Elapsed Time:</strong> {flight.elapsedTime} minutes <br />
-                <strong>Stops:</strong> {flight.segmentInfo.numberOfStops} <br />
-                <strong>Intermediate Airports:</strong> {flight.segmentInfo.intermediateAirports.iata.length > 0 ? flight.segmentInfo.intermediateAirports.iata.join(", ") : "None"} <br />
-                <strong>Aircraft Type:</strong> {flight.equipment?.actualAircraftType.iata || "Unknown"} <br />
-                <strong>Status:</strong> {flight.statusDetails?.[0]?.state || "Unknown"} <br />
-              </li>
-            ))}
-          </ul>
+          {results && (
+            <div className="mt-6">
+              <h3 className="font-bold mb-2">Flight Results:</h3>
+              <ul className="list-disc pl-5">
+                {results?.data?.map((flight, index) => (
+                  <li key={index} className="mb-4 border-b pb-2">
+                    <strong>Flight:</strong> {flight.carrier.iata} {flight.flightNumber} <br />
+                    <strong>Airline:</strong> {flight.marketingFlights?.[0]?.code || "Unknown"}<br />
+                    <strong>Departure:</strong> {flight.departure.airport.iata} ({flight.departure.airport.icao}) at {flight.departure.time.local} <br />
+                    <strong>Arrival:</strong> {flight.arrival.airport.iata} ({flight.arrival.airport.icao}) at {flight.arrival.time.local} <br />
+                    <strong>Elapsed Time:</strong> {flight.elapsedTime} minutes <br />
+                    <strong>Stops:</strong> {flight.segmentInfo.numberOfStops} <br />
+                    <strong>Intermediate Airports:</strong> {flight.segmentInfo.intermediateAirports.iata.length > 0 ? flight.segmentInfo.intermediateAirports.iata.join(", ") : "None"} <br />
+                    <strong>Aircraft Type:</strong> {flight.equipment?.actualAircraftType.iata || "Unknown"} <br />
+                    <strong>Status:</strong> {flight.statusDetails?.[0]?.state || "Unknown"} <br />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -12,7 +12,7 @@ export default function HotelDetailsPage({ hotelDetailData , setHotelDetailPage}
   return (
     <>
     <div className=' content-start left-0 w-[82.5%] m-auto'>
-    <button onClick={GoToHotelPage} className='w-auto px-2 py-1 rounded-lg  bg-red-600' >go back</button>
+   
     </div>
     <div className="w-full max-w-[95%] sm:max-w-[80%] lg:max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
       {/* Hotel Name */}
@@ -85,9 +85,10 @@ export default function HotelDetailsPage({ hotelDetailData , setHotelDetailPage}
           rel="noopener noreferrer"
           className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
         >
-          Book Now
+          More details
         </a>
       </div>
+      <button onClick={GoToHotelPage} className='w-[60%] mt-6 mx-[20%] bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg' >go back</button>
     </div>
     </>
   );
