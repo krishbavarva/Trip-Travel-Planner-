@@ -7,7 +7,6 @@ const LocationPage = ({ setCreateTrip }) => {
 
   const handleSearch = () => {
     setHotelPage(true);
-    // Add your search functionality here
   };
 
   const goBack = () => {
@@ -19,27 +18,31 @@ const LocationPage = ({ setCreateTrip }) => {
       {hotelPage ? (
         <FindTransportation location={location} setHotelPage={setHotelPage} />
       ) : (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-          <h1 className="text-2xl font-bold mb-4">Enter Your Location</h1>
-          <input
-            type="text"
-            placeholder="Enter city or location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="w-80 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={handleSearch}
-            className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md shadow-lg hover:bg-blue-600 transition"
-          >
-            Search
-          </button>
-          <button
-            onClick={goBack}
-            className="mt-4 px-6 py-2 bg-gray-500 text-white rounded-md shadow-lg hover:bg-gray-600 transition"
-          >
-            Go Back
-          </button>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+          <div className="bg-gray-800 bg-opacity-50 backdrop-blur-lg p-8 rounded-2xl shadow-lg w-96 text-center">
+            <h1 className="text-3xl font-bold text-cyan-400 mb-4">
+              Enter Your Location
+            </h1>
+            <input
+              type="text"
+              placeholder="Enter city or location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-md"
+            />
+            <button
+              onClick={handleSearch}
+              className="mt-6 w-full px-6 py-3 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+            >
+              Search
+            </button>
+            <button
+              onClick={goBack}
+              className="mt-4 w-full px-6 py-3 bg-gray-600 text-white rounded-lg shadow-lg hover:bg-gray-700 transition-all duration-300"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
       )}
     </>
