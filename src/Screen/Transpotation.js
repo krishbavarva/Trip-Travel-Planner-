@@ -21,39 +21,86 @@ const FindTransportation = ({ location, setHotelPage, adults, children }) => {
     }
   }, [tFlightPrice]);
 
+  const mockFlightData = {
+    data: [
+      {
+        carrier: { iata: "AI" },
+        flightNumber: "101",
+        marketingFlights: [{ code: "Air India" }],
+        price: 3500,
+        origin: { airport: { iata: "DEL", name: "Indira Gandhi International Airport" }},
+        destination: { airport: { iata: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport" }},
+        departure: { time: "08:00" },
+        arrival: { time: "10:00" },
+        status: "Scheduled"
+      },
+      {
+        carrier: { iata: "6E" },
+        flightNumber: "204",
+        marketingFlights: [{ code: "IndiGo" }],
+        price: 2800,
+        origin: { airport: { iata: "DEL", name: "Indira Gandhi International Airport" }},
+        destination: { airport: { iata: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport" }},
+        departure: { time: "10:30" },
+        arrival: { time: "12:30" },
+        status: "Scheduled"
+      },
+      {
+        carrier: { iata: "SG" },
+        flightNumber: "305",
+        marketingFlights: [{ code: "SpiceJet" }],
+        price: 2200,
+        origin: { airport: { iata: "DEL", name: "Indira Gandhi International Airport" }},
+        destination: { airport: { iata: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport" }},
+        departure: { time: "14:45" },
+        arrival: { time: "16:45" },
+        status: "Scheduled"
+      }
+    ]
+  };
+
   const fetchTransportData = async () => {
-    let apiUrl = "";
-    let options = {};
-
-    const formattedDateTime = `${date}T08:00:00`;
-
-    if (transportType === "flight") {
-      apiUrl = `https://flight-info-api.p.rapidapi.com/status?version=v2&dep_iata=${from}&arr_iata=${to}&DepartureDateTime=${formattedDateTime}`;
-      options = {
-        method: "GET",
-        headers: {
-          "x-rapidapi-key": "e4c549284fmshc3999b65408ef08p128889jsnaa570ab1cc5b",
-          "x-rapidapi-host": "flight-info-api.p.rapidapi.com",
-        },
-      };
+    if (!from || !to || !date) {
+      alert("Please fill in all fields");
+      return;
     }
 
     try {
-      const response = await fetch(apiUrl, options);
-      const data = await response.json();
+      console.log("Mock API Call with:", { from, to, date });
 
-      if (data.length === 0) {
-        setResults([]);
-        alert("No flights found!");
-      } else {
-        setResults(data);
-      }
+      const updatedMockData = {
+        ...mockFlightData,
+        data: mockFlightData.data.map(flight => ({
+          ...flight,
+          origin: {
+            ...flight.origin,
+            airport: {
+              ...flight.origin.airport,
+              iata: from
+            }
+          },
+          destination: {
+            ...flight.destination,
+            airport: {
+              ...flight.destination.airport,
+              iata: to
+            }
+          }
+        }))
+      };
+
+      setResults(updatedMockData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Fetch error:", error);
+      setResults(mockFlightData);
     }
   };
 
   const goToFindHotel = () => {
+    if (!storedPrices.length) {
+      const confirmHotel = window.confirm("Transportation is pending. If you want to go directly to hotels, press OK.");
+      if (!confirmHotel) return;
+    }
     setFindHotel(true);
   };
 
@@ -62,23 +109,34 @@ const FindTransportation = ({ location, setHotelPage, adults, children }) => {
   };
 
   const bookFlight = (flight) => {
+    if (!flight || !flight.origin?.airport || !flight.destination?.airport) {
+      alert("Flight data is invalid.");
+      return;
+    }
+
     setSelectedFlight(flight);
     setFlightPrice(flight.price || 2500);
-    setTFlightPrice(0)
+    setTFlightPrice(0);
   };
 
   const deleteStoredFlight = (index) => {
-    window.alert("are you sure for delete this flight")
-    setStoredPrices((prev) => prev.filter((_, i) => i !== index));
-    window.alert("flight deleted succesfully")
+    const confirmDelete = window.confirm("Are you sure you want to delete this flight?");
+    if (confirmDelete) {
+      setStoredPrices((prev) => prev.filter((_, i) => i !== index));
+      alert("Flight deleted successfully");
+    }
   };
 
   const showSelectedFlight = () => {
-    setShowStoredPrices(true)
-    setResults(null)
-  }
-  console.log(storedPrices , "storedPrice")
- 
+    setShowStoredPrices(true);
+    setResults(null);
+  };
+
+  const hideSelectedFlight = () => {
+    setShowStoredPrices(false);
+    setResults([]);
+  };
+
   return (
     <>
       {selectedFlight ? (
@@ -93,16 +151,24 @@ const FindTransportation = ({ location, setHotelPage, adults, children }) => {
           setSelectedFlight={setSelectedFlight}
         />
       ) : findHotel ? (
-        <Hotels location={location} setFindHotel={setFindHotel} />
+        <Hotels
+          location={location}
+          setFindHotel={setFindHotel}
+          selectedFlight={selectedFlight}
+          flightPrice={tFlightPrice}
+          storedPrices={storedPrices}
+          adults={adults}
+          children={children}
+        />
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-          <div className="bg-gray-800 bg-opacity-50 backdrop-blur-lg p-8 rounded-2xl shadow-lg w-96 text-center">
+          <div className="bg-gray-800 p-8 rounded-2xl shadow-lg w-96 text-center">
             <h2 className="text-2xl font-bold text-cyan-400 mb-4">Find Transportation</h2>
 
             <select
               value={transportType}
               onChange={(e) => setTransportType(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-md mb-4"
+              className="w-full mb-4 px-4 py-3 bg-gray-700 rounded-lg border border-gray-600"
             >
               <option value="flight">Flight</option>
               <option value="bus">Bus</option>
@@ -113,64 +179,62 @@ const FindTransportation = ({ location, setHotelPage, adults, children }) => {
               type="text"
               placeholder="From (IATA Code)"
               value={from}
-              onChange={(e) => setFrom(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-md mb-4"
+              onChange={(e) => setFrom(e.target.value.toUpperCase())}
+              className="w-full mb-4 px-4 py-3 bg-gray-700 rounded-lg border border-gray-600"
             />
 
             <input
               type="text"
               placeholder="To (IATA Code)"
               value={to}
-              onChange={(e) => setTo(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-md mb-4"
+              onChange={(e) => setTo(e.target.value.toUpperCase())}
+              className="w-full mb-4 px-4 py-3 bg-gray-700 rounded-lg border border-gray-600"
             />
 
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-md mb-4"
+              className="w-full mb-4 px-4 py-3 bg-gray-700 rounded-lg border border-gray-600"
             />
 
-            <button
-              onClick={fetchTransportData}
-              className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300 mb-2"
-            >
+            <button onClick={fetchTransportData} className="w-full mb-2 py-3 bg-purple-600 rounded-lg">
               Search Flights
             </button>
-            <button
-              onClick={goToFindHotel}
-              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300 mb-2"
-            >
+
+            <button onClick={goToFindHotel} className="w-full mb-2 py-3 bg-blue-600 rounded-lg">
               Find Hotels
             </button>
-            <button
-              onClick={goBack}
-              className="w-full px-6 py-3 bg-gray-600 text-white rounded-lg shadow-lg hover:bg-gray-700 transition-all duration-300 mb-2"
-            >
+
+            <button onClick={goBack} className="w-full mb-2 py-3 bg-gray-600 rounded-lg">
               Go Back
             </button>
-            
-            <button
-              onClick={showSelectedFlight}
-              className="mt-6 w-full px-6 py-3 bg-yellow-600 text-white rounded-lg shadow-lg hover:bg-yellow-700 transition-all duration-300"
-            >
-              Show Selected Flight Details
-            </button>
-            {results && (
+
+            {storedPrices.length > 0 && (
+              <button
+                onClick={showSelectedFlight}
+                className="w-full mt-6 py-3 bg-yellow-600 rounded-lg"
+              >
+                Show Selected Flight Details
+              </button>
+            )}
+
+            {results?.data?.length > 0 && (
               <div className="mt-6 text-left">
                 <h3 className="text-lg font-bold text-cyan-400 mb-2">Flight Results:</h3>
-                <ul className="list-none space-y-4">
-                  {results?.data?.map((flight, index) => (
-                    <li key={index} className="p-4 bg-gray-800 rounded-lg shadow-md">
-                      <p><strong className="text-cyan-300">Flight From:</strong> {from}</p>
-                      <p><strong className="text-cyan-300">Flight To:</strong> {to}</p>
-                      <p><strong className="text-cyan-300">Flight:</strong> {flight.carrier.iata} {flight.flightNumber}</p>
+                <ul className="space-y-4">
+                  {results.data.map((flight, index) => (
+                    <li key={index} className="p-4 bg-gray-800 rounded-lg">
+                      <p><strong className="text-cyan-300">From:</strong> {flight.origin?.airport?.iata} ({flight.origin?.airport?.name})</p>
+                      <p><strong className="text-cyan-300">To:</strong> {flight.destination?.airport?.iata} ({flight.destination?.airport?.name})</p>
+                      <p><strong className="text-cyan-300">Flight:</strong> {flight.carrier?.iata} {flight.flightNumber}</p>
                       <p><strong className="text-cyan-300">Airline:</strong> {flight.marketingFlights?.[0]?.code || "Unknown"}</p>
                       <p><strong className="text-cyan-300">Price:</strong> ₹{flight.price || 2500}</p>
+                      <p><strong className="text-cyan-300">Departure:</strong> {flight.departure?.time}</p>
+                      <p><strong className="text-cyan-300">Arrival:</strong> {flight.arrival?.time}</p>
                       <button
                         onClick={() => bookFlight(flight)}
-                        className="mt-2 w-full px-6 py-2 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300"
+                        className="mt-2 w-full py-2 bg-green-600 rounded-lg"
                       >
                         Book Now
                       </button>
@@ -180,25 +244,34 @@ const FindTransportation = ({ location, setHotelPage, adults, children }) => {
               </div>
             )}
 
-
             {showStoredPrices && (
               <div className="mt-6 text-left">
                 <h3 className="text-lg font-bold text-cyan-400 mb-2">Stored Flight Prices:</h3>
-                <ul className="list-none space-y-4">
-                  {storedPrices.map((flight, index) => (
-                    <li key={index} className="p-4 bg-gray-800 rounded-lg shadow-md">
-                      <p><strong className="text-cyan-300">From:</strong> {flight.from}</p>
-                      <p><strong className="text-cyan-300">To:</strong> {flight.to}</p>
-                      <p><strong className="text-cyan-300">Total Price:</strong> ₹{flight.totalPrice}</p>
-                      <button
-                        onClick={() => deleteStoredFlight(index)}
-                        className="mt-2 w-full px-6 py-2 bg-red-600 text-white rounded-lg shadow-lg hover:bg-red-700 transition-all duration-300"
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                {storedPrices.length > 0 ? (
+                  <ul className="space-y-4">
+                    {storedPrices.map((flight, index) => (
+                      <li key={index} className="p-4 bg-gray-800 rounded-lg">
+                        <p><strong className="text-cyan-300">From:</strong> {flight.from}</p>
+                        <p><strong className="text-cyan-300">To:</strong> {flight.to}</p>
+                        <p><strong className="text-cyan-300">Total Price:</strong> ₹{flight.totalPrice}</p>
+                        <button
+                          onClick={() => deleteStoredFlight(index)}
+                          className="mt-2 w-full py-2 bg-red-600 rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-300">No flights stored yet.</p>
+                )}
+                <button
+                  onClick={hideSelectedFlight}
+                  className="mt-4 w-full py-3 bg-gray-600 rounded-lg"
+                >
+                  Go Back
+                </button>
               </div>
             )}
           </div>

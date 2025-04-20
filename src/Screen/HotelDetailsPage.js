@@ -4,8 +4,18 @@ import AdventureFinder from "./EventPage";
 export default function HotelDetailsPage({
   hotelDetailData,
   setHotelDetailPage,
+  storedPrices,
+  adults,
+  children,
+  totalDays,
+  checkInDate,
+  checkOutDate,
+  setBookingData
 }) {
   const [event, setEvent] = useState(false);
+  const [showBookingPage, setShowBookingPage] = useState(false);
+  const [bookingDetail, setBookingDetail] = useState("");
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
 
   if (!hotelDetailData) {
     return (
@@ -23,6 +33,33 @@ export default function HotelDetailsPage({
     setEvent(true);
   };
 
+  const calculateTotalPrice = () => {
+    const rawPrice = hotelDetailData.total_rate?.lowest || "0";
+    const hotelPrice = parseFloat(rawPrice.replace(/[^\d.]/g, "")) || 0;
+
+    const numberOfRooms = adults > 3 ? Math.ceil(adults / 2) : 1;
+    return totalDays * hotelPrice * numberOfRooms;
+  };
+
+  const confirmBook = () => {
+    const bookingDetails = {
+      hotelName: hotelDetailData.name,
+      hotelImage: hotelDetailData.images?.[0]?.original_image,
+      hotelPrice: hotelDetailData.total_rate?.lowest,
+      checkInDate,
+      checkOutDate,
+      adults,
+      children,
+      totalDays,
+      totalPrice: calculateTotalPrice(),
+    };
+    
+    // Call setBookingData as a function to update the parent state
+    setBookingData(prevBookings => [...prevBookings, bookingDetails]);
+    setBookingDetail(bookingDetails);
+    setBookingConfirmed(true);
+  };
+
   return (
     <>
       {event ? (
@@ -31,6 +68,72 @@ export default function HotelDetailsPage({
           longitude={hotelDetailData.gps_coordinates?.longitude}
           setEvent={setEvent}
         />
+      ) : showBookingPage ? (
+        <div className="w-full max-w-5xl mx-auto p-6 bg-[#1A1A1A] shadow-lg rounded-lg mt-10 text-white">
+          {/* Booking Details */}
+          <h1 className="text-3xl font-bold mb-6">Booking Details</h1>
+
+          <div className="mb-6">
+            <p className="text-lg text-gray-300">
+              <strong>Hotel:</strong> {hotelDetailData.name}
+            </p>
+            <p className="text-lg text-gray-300">
+              <strong>Check-in Date:</strong> {checkInDate}
+            </p>
+            <p className="text-lg text-gray-300">
+              <strong>Check-out Date:</strong> {checkOutDate}
+            </p>
+            <p className="text-lg text-gray-300">
+              <strong>Adults:</strong> {adults}
+            </p>
+            <p className="text-lg text-gray-300">
+              <strong>Children:</strong> {children}
+            </p>
+            <p className="text-lg text-gray-300">
+              <strong>Total Days:</strong> {totalDays}
+            </p>
+            <p className="text-lg text-gray-300">
+              <strong>Price per Day:</strong> {hotelDetailData.total_rate?.lowest || "0"}
+            </p>
+            <p className="text-lg text-gray-300">
+              <strong>Total Price:</strong> ₹{calculateTotalPrice()}
+            </p>
+          </div>
+
+          {/* Confirmation Button */}
+          <div className="flex justify-center mt-6">
+            <button
+              className={`bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-lg ${
+                bookingConfirmed && "opacity-50 cursor-not-allowed"
+              }`}
+              onClick={confirmBook}
+              disabled={bookingConfirmed}
+            >
+              Confirm Booking
+            </button>
+          </div>
+
+          {/* Success Message */}
+          {bookingConfirmed && (
+            <div className="text-center text-green-500 font-semibold text-lg mt-4">
+              Booking Confirmed Successfully! You can now go back and book more hotels for your trip.
+            </div>
+          )}
+
+          {/* Go Back Button */}
+          <button
+            onClick={() => {
+              if (bookingConfirmed) {
+                setHotelDetailPage(false);
+              } else {
+                setShowBookingPage(false);
+              }
+            }}
+            className="w-full mt-6 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg"
+          >
+            {bookingConfirmed ? "Return to Hotel Search" : "Go Back"}
+          </button>
+        </div>
       ) : (
         <div className="w-full max-w-5xl mx-auto p-6 bg-[#1A1A1A] shadow-lg rounded-lg mt-10 text-white">
           {/* Hotel Name */}
@@ -142,6 +245,14 @@ export default function HotelDetailsPage({
               Nearby Places
             </button>
           </div>
+
+          {/* Book Hotel Button */}
+          <button
+            onClick={() => setShowBookingPage(true)}
+            className="w-full mt-6 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg"
+          >
+            Book Hotel
+          </button>
 
           {/* Go Back Button */}
           <button
