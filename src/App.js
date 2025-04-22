@@ -11,6 +11,10 @@ import FindTransportation from './Screen/Transpotation';
 import WeatherDetails from './Screen/WeatherDetail';
 import Auth from './Screen/Login';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import UserBookingsPage from './Screen/BookingDetails.js';
+import PaymentPage from './Screen/Payment.js';
+import PackagesPage from './Screen/PackagePage.js';
+import PackageDetailPage from './Screen/PackageDetail.js';
 
 function App() {
   return (
@@ -25,7 +29,12 @@ function App() {
           <Route path="/hotels" element={<HotelPage />} />
           <Route path="/transportation" element={<FindTransportation />} />
           <Route path="/weather" element={<WeatherDetails />} />
-          <Route path="/auth" element={<Auth />} /> 
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/booking" element={<UserBookingsPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/packages" element={<PackagesPage />} />
+          {/* Corrected route for package details */}
+          <Route path="/package/:id" element={<PackageDetailPage />} />
         </Routes>
         <Footer />
       </Router>

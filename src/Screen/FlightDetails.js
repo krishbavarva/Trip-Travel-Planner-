@@ -8,6 +8,7 @@ const FlightDetails = ({
   setSelectedFlight,
   from,
   to,
+  date,
 }) => {
   if (!flight) {
     return (
@@ -56,27 +57,25 @@ const FlightDetails = ({
           {flight?.marketingFlights?.[0]?.code || "Unknown"}
         </p>
         <p>
+          <strong className="text-cyan-300">Date:</strong>{" "}
+          {date || "Unknown"}
+        </p>
+        <p>
           <strong className="text-cyan-300">From:</strong>{" "}
-          {flight?.departure?.airport?.iata} -{" "}
-          {flight?.departure?.airport?.name}
+          {flight?.origin?.airport?.iata} -{" "}
+          {flight?.origin?.airport?.name}
         </p>
         <p>
           <strong className="text-cyan-300">To:</strong>{" "}
-          {flight?.arrival?.airport?.iata} - {flight?.arrival?.airport?.name}
+          {flight?.destination?.airport?.iata} - {flight?.destination?.airport?.name}
         </p>
         <p>
           <strong className="text-cyan-300">Departure Time:</strong>{" "}
-          {new Date(flight?.departure?.scheduledTime).toLocaleString("en-IN", {
-            dateStyle: "medium",
-            timeStyle: "short",
-          })}
+          {flight?.departure?.time}
         </p>
         <p>
           <strong className="text-cyan-300">Arrival Time:</strong>{" "}
-          {new Date(flight?.arrival?.scheduledTime).toLocaleString("en-IN", {
-            dateStyle: "medium",
-            timeStyle: "short",
-          })}
+          {flight?.arrival?.time}
         </p>
 
         <div className="my-4 border-t border-gray-600 pt-4">

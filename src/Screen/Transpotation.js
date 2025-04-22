@@ -136,6 +136,7 @@ const FindTransportation = ({ location, setHotelPage, adults, children }) => {
     setShowStoredPrices(false);
     setResults([]);
   };
+  console.log(selectedFlight , "selected flight")
 
   return (
     <>
@@ -149,6 +150,7 @@ const FindTransportation = ({ location, setHotelPage, adults, children }) => {
           children={children}
           setTFlightPrice={setTFlightPrice}
           setSelectedFlight={setSelectedFlight}
+          date={date}
         />
       ) : findHotel ? (
         <Hotels

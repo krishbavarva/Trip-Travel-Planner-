@@ -1,5 +1,6 @@
+// src/pages/Auth.jsx
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,6 +34,7 @@ const Auth = () => {
       }
 
       localStorage.setItem("token", generateToken());
+      localStorage.setItem("loggedInUser", email); // ✅ Store user email
       alert("Login successful!");
       navigate(redirectPath);
     } else {
@@ -48,13 +50,10 @@ const Auth = () => {
         return;
       }
 
-      const userData = {
-        email,
-        password,
-      };
-
+      const userData = { email, password };
       localStorage.setItem(email, JSON.stringify(userData));
       localStorage.setItem("token", generateToken());
+      localStorage.setItem("loggedInUser", email); // ✅ Store user email
       alert("Registration successful!");
       navigate(redirectPath);
     }

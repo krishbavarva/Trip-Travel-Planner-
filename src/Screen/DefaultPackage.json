@@ -1,0 +1,234 @@
+{
+    "packages": [
+      {
+        "id": 1,
+        "name": "Beachside Getaway",
+        "destination": "Goa, India",
+        "duration": 5,
+        "events": [
+          {
+            "day": 1,
+            "activity": "Arrive at Goa International Airport and transfer to hotel.",
+            "details": "Check-in at beach resort. Relax and enjoy the sunset on the beach."
+          },
+          {
+            "day": 2,
+            "activity": "Water Sports Adventure",
+            "details": "Explore water activities like jet-skiing, parasailing, and banana boat rides."
+          },
+          {
+            "day": 3,
+            "activity": "Explore North Goa",
+            "details": "Visit famous beaches like Anjuna, Baga, and Calangute. Evening shopping at local markets."
+          },
+          {
+            "day": 4,
+            "activity": "Visit South Goa",
+            "details": "Explore quieter beaches, visit historic churches, and enjoy local Goan cuisine."
+          },
+          {
+            "day": 5,
+            "activity": "Departure",
+            "details": "Check-out from the resort and transfer to Goa International Airport for departure."
+          }
+        ],
+        "accommodation": {
+          "hotel": "Beach Resort",
+          "rating": 4,
+          "amenities": [
+            "Swimming Pool",
+            "Private Beach",
+            "Restaurant",
+            "Free Wi-Fi"
+          ]
+        },
+        "pricing": {
+          "adults": 12000,
+          "children": 8000,
+          "currency": "INR"
+        },
+        "inclusions": [
+          "Airport Transfers",
+          "Accommodation",
+          "Breakfast and Dinner",
+          "Water Sports Activities"
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Himalayan Trekking Adventure",
+        "destination": "Manali, India",
+        "duration": 7,
+        "events": [
+          {
+            "day": 1,
+            "activity": "Arrive at Manali and transfer to hotel.",
+            "details": "Check-in at hotel and relax in the scenic beauty of the Himalayas."
+          },
+          {
+            "day": 2,
+            "activity": "Trekking to Solang Valley",
+            "details": "Enjoy a thrilling trek to Solang Valley with views of snow-capped mountains."
+          },
+          {
+            "day": 3,
+            "activity": "Visit Rohtang Pass",
+            "details": "Drive to Rohtang Pass, one of the highest motorable passes, and enjoy snow activities."
+          },
+          {
+            "day": 4,
+            "activity": "Visit Old Manali",
+            "details": "Explore the quaint town of Old Manali, visit ancient temples, and relax in local cafes."
+          },
+          {
+            "day": 5,
+            "activity": "River Rafting at Beas River",
+            "details": "Experience an exciting river rafting session in the Beas River."
+          },
+          {
+            "day": 6,
+            "activity": "Explore Local Markets",
+            "details": "Visit the local Manali market, shop for handicrafts, and enjoy a relaxing evening."
+          },
+          {
+            "day": 7,
+            "activity": "Departure",
+            "details": "Check-out from hotel and transfer to the airport for departure."
+          }
+        ],
+        "accommodation": {
+          "hotel": "Himalayan View Hotel",
+          "rating": 3,
+          "amenities": [
+            "Mountain View",
+            "Trekking Assistance",
+            "Restaurant",
+            "Free Wi-Fi"
+          ]
+        },
+        "pricing": {
+          "adults": 15000,
+          "children": 10000,
+          "currency": "INR"
+        },
+        "inclusions": [
+          "Airport Transfers",
+          "Accommodation",
+          "Breakfast and Dinner",
+          "Trekking Activities",
+          "River Rafting"
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Cultural Heritage Tour",
+        "destination": "Jaipur, India",
+        "duration": 6,
+        "events": [
+          {
+            "day": 1,
+            "activity": "Arrive in Jaipur and check-in at the hotel.",
+            "details": "Relax and enjoy the royal Rajasthani hospitality."
+          },
+          {
+            "day": 2,
+            "activity": "Visit Amber Fort and Jal Mahal",
+            "details": "Explore the grandeur of Amber Fort and the beautiful Jal Mahal."
+          },
+          {
+            "day": 3,
+            "activity": "City Palace and Jantar Mantar",
+            "details": "Visit the City Palace, and learn about the history of astronomy at Jantar Mantar."
+          },
+          {
+            "day": 4,
+            "activity": "Shopping at Local Markets",
+            "details": "Explore the bustling bazaars of Jaipur and shop for traditional Rajasthani textiles and jewelry."
+          },
+          {
+            "day": 5,
+            "activity": "Visit Hawa Mahal and Albert Hall Museum",
+            "details": "Marvel at the intricate architecture of Hawa Mahal and learn about Jaipur’s history at the Albert Hall Museum."
+          },
+          {
+            "day": 6,
+            "activity": "Departure",
+            "details": "Check-out from the hotel and transfer to the airport for your onward journey."
+          }
+        ],
+        "accommodation": {
+          "hotel": "Royal Heritage Hotel",
+          "rating": 5,
+          "amenities": [
+            "Royal Suites",
+            "Spa and Wellness Center",
+            "Traditional Rajasthani Cuisine",
+            "Free Wi-Fi"
+          ]
+        },
+        "pricing": {
+          "adults": 18000,
+          "children": 12000,
+          "currency": "INR"
+        },
+        "inclusions": [
+          "Airport Transfers",
+          "Accommodation",
+          "Breakfast and Dinner",
+          "Cultural Tours",
+          "Shopping Experience"
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Desert Safari Experience",
+        "destination": "Dubai, UAE",
+        "duration": 4,
+        "events": [
+          {
+            "day": 1,
+            "activity": "Arrive in Dubai and transfer to hotel.",
+            "details": "Check-in at a luxury hotel. Evening at leisure to explore local attractions."
+          },
+          {
+            "day": 2,
+            "activity": "Desert Safari",
+            "details": "Experience a thrilling desert safari, camel rides, and a traditional barbecue dinner in the desert."
+          },
+          {
+            "day": 3,
+            "activity": "Burj Khalifa and Dubai Mall",
+            "details": "Visit the Burj Khalifa observation deck and explore the Dubai Mall for shopping and entertainment."
+          },
+          {
+            "day": 4,
+            "activity": "Departure",
+            "details": "Check-out from hotel and transfer to the airport for departure."
+          }
+        ],
+        "accommodation": {
+          "hotel": "Luxury Desert Resort",
+          "rating": 5,
+          "amenities": [
+            "Private Beach",
+            "Infinity Pool",
+            "Gourmet Dining",
+            "Spa Services"
+          ]
+        },
+        "pricing": {
+          "adults": 25000,
+          "children": 15000,
+          "currency": "AED"
+        },
+        "inclusions": [
+          "Airport Transfers",
+          "Accommodation",
+          "Breakfast and Dinner",
+          "Desert Safari",
+          "Dubai City Tour"
+        ]
+      }
+    ]
+  }
+  

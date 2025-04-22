@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import axios from "axios";
 import LocationPage from "./LocationPage";
+import defaultPackages from "./DefaultPackage.json"; // Adjust the path if needed
+import { Link } from "react-router-dom";
+
 
 const travelCarouselImages = [
   "/images/wp6987774.jpg",
@@ -36,6 +39,16 @@ const travelDestinations = [
 const TravelPlannerHome = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [createTrip, setCreateTrip] = useState(false);
+  const [packages, setPackages] = useState([]);
+  
+  useEffect(() => {
+    // Check if the JSON data is correctly loaded and has the `packages` array
+    if (defaultPackages && Array.isArray(defaultPackages.packages)) {
+    setPackages(defaultPackages.packages); // Set the packages state to the array
+    } else {
+    console.error("Packages data is not an array or not available.");
+    }
+}, []);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
@@ -78,9 +91,7 @@ const TravelPlannerHome = () => {
               {travelCarouselImages.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    currentIndex === index ? "bg-teal-400" : "bg-gray-600"
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${currentIndex === index ? "bg-teal-400" : "bg-gray-600"}`}
                 ></div>
               ))}
             </div>
@@ -107,7 +118,7 @@ const TravelPlannerHome = () => {
           </div>
 
           {/* Top Destinations */}
-          <section className="w-[90%] mx-auto my-16">
+          {/* <section className="w-[90%] mx-auto my-16">
             <h2 className="text-3xl font-bold text-center mb-8 text-rose-400">
               Top Destinations
             </h2>
@@ -126,6 +137,37 @@ const TravelPlannerHome = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          </section> */}
+
+          {/* Travel Packages */}
+          <section className="w-[90%] mx-auto my-16">
+            <h2 className="text-3xl font-bold text-center mb-8 text-teal-400">
+              Featured Travel Packages
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {packages.length > 0 ? (
+              packages.map((pkg) => (
+                <div
+                key={pkg.id}
+                className="bg-gray-700 bg-opacity-80 rounded-lg p-6 shadow-xl hover:shadow-2xl hover:bg-gray-600 transition-all duration-300 ease-in-out"
+                >
+                <h2 className="text-2xl font-bold text-white">{pkg.name}</h2>
+                <p className="text-gray-300">Destination: {pkg.destination}</p>
+                <p className="text-gray-300">Duration: {pkg.duration} days</p>
+                <div className="mt-4">
+                    <Link
+                    to={`/package/${pkg.id}`}
+                    className="px-8 py-3 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700 hover:scale-105 transition-all duration-300"
+                    >
+                    View Details
+                    </Link>
+                </div>
+                </div>
+            ))
+              ) : (
+                <p className="text-center text-gray-400">No packages available at the moment.</p>
+              )}
             </div>
           </section>
 

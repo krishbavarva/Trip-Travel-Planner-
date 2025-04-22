@@ -39,6 +39,7 @@ const Navbar = () => {
           <button onClick={handleCustomTripClick} className="text-white hover:text-blue-600">Custom Trip</button>
           <Link to="/about" className="text-white hover:text-blue-600">About</Link>
           <Link to="/contact" className="text-white hover:text-blue-600">Contact</Link>
+          <Link to="/booking" className="text-white hover:text-blue-600">Bookings</Link>
         </div>
 
         {/* Auth Buttons */}
@@ -70,6 +71,7 @@ const Navbar = () => {
           <button onClick={handleCustomTripClick} className="hover:text-blue-600">Custom Trip</button>
           <Link to="/about" className="hover:text-blue-600" onClick={() => setIsOpen(false)}>About</Link>
           <Link to="/contact" className="hover:text-blue-600" onClick={() => setIsOpen(false)}>Contact</Link>
+          <Link to="/booking" className="hover:text-blue-600" onClick={() => setIsOpen(false)}>Bookings</Link>
 
           {isLoggedIn ? (
             <button
@@ -84,7 +86,6 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/auth" className="px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-600 hover:text-white">Login</Link>
-              {/* <Link to="/auth?mode=register" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Register</Link> */}
             </>
           )}
         </div>
